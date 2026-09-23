@@ -17,7 +17,11 @@ export default defineEventHandler(async (event) => {
   }
 
   try {
-    const result = applyGameAction(game, { playerId, teamId: player.teamId }, action)
+    const result = applyGameAction(game, {
+      playerId,
+      teamId: player.teamId,
+      isPlaybackController: player.id === game.players[0]?.id
+    }, action)
     await setGame(code, game)
     return {
       ...result,

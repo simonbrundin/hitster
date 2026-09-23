@@ -26,6 +26,7 @@ const HIDDEN_TRACK: SpotifyTrack = {
 export interface GameActor {
   playerId: string
   teamId: string
+  isPlaybackController?: boolean
 }
 
 export interface ActionResult {
@@ -461,7 +462,7 @@ function assertActorCanAct(
   }
 
   const isChallenge = action.type === 'challenge'
-  if (!isChallenge && game.currentTurn !== actor.teamId) {
+  if (!isChallenge && game.currentTurn !== actor.teamId && !actor.isPlaybackController) {
     throw createGameError(403, 'It is not this team\'s turn')
   }
 }

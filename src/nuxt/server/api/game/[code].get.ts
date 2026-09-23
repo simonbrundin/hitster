@@ -1,4 +1,4 @@
-import { getGame, setGame } from './create.post'
+import { getGame } from './create.post'
 import { sanitizeGameForPlayer } from '../../utils/game-engine'
 
 export default defineEventHandler(async (event) => {
@@ -11,9 +11,6 @@ export default defineEventHandler(async (event) => {
 
   const playerId = getQuery(event).playerId
   const sanitized = sanitizeGameForPlayer(game, typeof playerId === 'string' ? playerId : '')
-
-  // Write back so the game stays fresh in storage
-  await setGame(code, game)
 
   return { game: sanitized }
 })
