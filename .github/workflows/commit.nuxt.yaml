@@ -73,19 +73,16 @@ jobs:
             environments/prod/patches/deployment.yaml
           cat environments/prod/patches/deployment.yaml
 
-      - name: Create PR
-        uses: peter-evans/create-pull-request@v7
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: "chore: update hitster image [skip ci]"
-          branch: bot/update-hitster-image
-          delete-branch: true
-          title: "chore: update hitster image"
-          body: |
-            Automated image update from commit workflow
-            - Image: `${{ needs.build-publish-image.outputs.image }}`
-          labels: |
-            ci
-            skip-review
+      - name: Push deployment update
+        env:
+          IMAGE: ${{ needs.build-publish-image.outputs.image }}
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add environments/prod/patches/deployment.yaml
+          git commit -m "chore: update hitster image [skip ci]
+
+          Image: ${{ env.IMAGE }}"
+          git push
           add-paths: |
             environments/prod/patches/deployment.yaml
