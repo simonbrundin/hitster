@@ -15,19 +15,19 @@ spec:
               value: "production"
             - name: APP_URL
               value: "https://hitster.simonbrundin.com"
-            - name: NUXT_APP_URL
+            - name: NITRO_APP_URL
               value: "https://hitster.simonbrundin.com"
             - name: SPOTIFY_CLIENT_ID
               valueFrom:
                 secretKeyRef:
                   name: hitster-auth
                   key: SPOTIFY_CLIENT_ID
-            - name: NUXT_SPOTIFY_CLIENT_ID
+            - name: NITRO_SPOTIFY_CLIENT_ID
               valueFrom:
                 secretKeyRef:
                   name: hitster-auth
                   key: SPOTIFY_CLIENT_ID
-            - name: NUXT_PUBLIC_SPOTIFY_CLIENT_ID
+            - name: NITRO_PUBLIC_SPOTIFY_CLIENT_ID
               valueFrom:
                 secretKeyRef:
                   name: hitster-auth
@@ -37,7 +37,7 @@ spec:
                 secretKeyRef:
                   name: hitster-auth
                   key: SPOTIFY_CLIENT_SECRET
-            - name: NUXT_SPOTIFY_CLIENT_SECRET
+            - name: NITRO_SPOTIFY_CLIENT_SECRET
               valueFrom:
                 secretKeyRef:
                   name: hitster-auth

@@ -42,7 +42,6 @@ export default defineNuxtConfig({
   },
 
   routeRules: {
-    '/': { prerender: true },
     '/game': { ssr: false },
     '/lobby': { ssr: false },
     '/results': { ssr: false },
