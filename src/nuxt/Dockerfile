@@ -23,9 +23,13 @@ FROM oven/bun:1.4.2-alpine AS production
 
 WORKDIR /app
 
-USER bun
-
 COPY --from=build --chown=bun:bun /app/.output .
+
+# Nitro's filesystem storage does not create nested directories on first write.
+# Create the game store before dropping privileges to the non-root runtime user.
+USER root
+RUN mkdir -p /app/data/games && chown -R bun:bun /app/data
+USER bun
 
 EXPOSE 3000
 
