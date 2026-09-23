@@ -140,8 +140,9 @@ export function useTimelineDrag() {
         if (currentCard && currentCard.id === cardId) {
           placeCard(currentCard.id, timelineLength)
         }
+      } else {
+        moveCard(cardId, getTouchSlot(touch, timelineLength))
       }
-      moveCard(cardId, getTouchSlot(touch, timelineLength))
     }
 
     _touchEndHandler = (event: TouchEvent) => {

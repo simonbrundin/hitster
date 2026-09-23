@@ -29,7 +29,10 @@ export function useGameSpotify() {
 
   const playCurrentTrack = async () => {
     const uri = spotifyUri.value
-    if (!uri) return
+    if (!uri) {
+      error.value = 'Det aktiva kortet saknar en Spotify-länk.'
+      return
+    }
 
     if (!isConnected.value) {
       connecting.value = true
@@ -63,6 +66,10 @@ export function useGameSpotify() {
     }
   }
 
+  const activateForUserGesture = async () => {
+    await activateElement()
+  }
+
   const ensureConnected = async () => {
     if (isConnected.value) return
     connecting.value = true
@@ -81,6 +88,7 @@ export function useGameSpotify() {
     isCurrentTrackPlaying,
     spotifyError: error,
     connecting,
+    activateForUserGesture,
     playCurrentTrack,
     togglePlayback,
     ensureConnected

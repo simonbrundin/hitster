@@ -60,6 +60,7 @@ const {
   isPlaying,
   spotifyError,
   connecting,
+  activateForUserGesture,
   playCurrentTrack,
   togglePlayback,
   ensureConnected
@@ -99,6 +100,7 @@ const handleCheck = async () => {
 }
 
 const handleLockIn = async () => {
+  await activateForUserGesture()
   const result = await lockPendingCards()
   if (!result.success) return
   await nextTick()
@@ -106,6 +108,7 @@ const handleLockIn = async () => {
 }
 
 const handleContinue = async () => {
+  await activateForUserGesture()
   const result = await continueTurn()
   if (!result.success) return
   await nextTick()
@@ -113,6 +116,7 @@ const handleContinue = async () => {
 }
 
 const handleNextTurn = async () => {
+  await activateForUserGesture()
   const result = await finishTurn()
   if (!result.success) return
   await nextTick()
@@ -136,7 +140,7 @@ const handlePlayClick = async () => {
 }
 
 const placeCurrentCard = () => {
-  if (suppressClick.value || turnPhase.value !== 'placing') return
+  if (suppressClick.value || turnPhase.value !== 'placing' || !isViewerTurn.value) return
   if (currentCard.value) placeCard(currentCard.value.id, timelineLength.value)
 }
 
@@ -313,6 +317,7 @@ const handleDrop = (event: DragEvent) => {
               ?
             </p>
             <button
+              v-if="isViewerTurn"
               class="mt-1 flex h-9 w-9 items-center justify-center rounded-full bg-[#1db954] text-white"
               :disabled="connecting"
               @click.stop="handlePlayClick"
@@ -322,6 +327,12 @@ const handleDrop = (event: DragEvent) => {
                 class="h-5 w-5"
               />
             </button>
+            <span
+              v-else
+              class="mt-1 block text-xs text-neutral-500"
+            >
+              Väntar på aktivt lag
+            </span>
           </div>
         </div>
       </div>

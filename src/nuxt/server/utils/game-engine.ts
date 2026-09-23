@@ -470,10 +470,13 @@ function reindexTimeline(cards: GameCard[]): void {
   })
 }
 
-function toSpotifyUri(spotifyUrl: string): string {
-  return spotifyUrl
-    .replace('https://open.spotify.com/track/', 'spotify:track:')
-    .split('?')[0] ?? ''
+function toSpotifyUri(spotifyUrl: string, trackId?: string): string {
+  const value = spotifyUrl.trim()
+  if (value.startsWith('spotify:track:')) return value.split('?')[0] ?? ''
+
+  const trackIdFromUrl = value.match(/(?:open\.spotify\.com\/(?:intl-[^/]+\/)?track\/)([A-Za-z0-9]+)/)?.[1]
+  const id = trackIdFromUrl ?? trackId?.trim()
+  return id ? `spotify:track:${id}` : ''
 }
 
 function sanitizeCard(card: GameCard, game: GameState, visibleTeamId: string | null): GameCard {
@@ -487,7 +490,7 @@ function sanitizeCard(card: GameCard, game: GameState, visibleTeamId: string | n
     return {
       ...card,
       track: { ...HIDDEN_TRACK },
-      playbackUri: toSpotifyUri(card.track.spotifyUrl)
+      playbackUri: toSpotifyUri(card.track.spotifyUrl, card.track.id)
     }
   }
 

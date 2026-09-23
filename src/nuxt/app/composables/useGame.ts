@@ -160,8 +160,14 @@ export function useGame() {
       .sort(sortByPosition)
   }
 
-  const placeCard = (cardId: string, slot: number): Promise<ActionResponse> =>
-    dispatch({ type: 'place', cardId, slot })
+  const placeCard = (cardId: string, slot: number): Promise<ActionResponse> => {
+    // Optimistic update: assume phase will become 'checking' after place
+    const state = gameState.value
+    if (state && state.turnPhase === 'placing') {
+      state.turnPhase = 'checking'
+    }
+    return dispatch({ type: 'place', cardId, slot })
+  }
 
   const moveCard = (cardId: string, slot: number): Promise<ActionResponse> =>
     dispatch({ type: 'move', cardId, slot })

@@ -38,7 +38,8 @@ export function useSpotify() {
         'user-read-email',
         'playlist-read-private',
         'playlist-read-collaborative',
-        'streaming'
+        'streaming',
+        'user-modify-playback-state'
       ].join(' ')
     })
 
