@@ -1,0 +1,11 @@
+# ==================================================================
+# Hitster Local Development Environment
+# ==================================================================
+
+local_resource(
+    "dev",
+    serve_cmd = ["pnpm", "dev"],
+    serve_dir = "../../src/nuxt",
+    labels = ["Frontend"],
+    auto_init = True,
+)

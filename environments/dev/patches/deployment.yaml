@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hitster-app
+spec:
+  replicas: 1
+  template:
+    spec:
+      containers:
+        - name: hitster-app
+          image: ghcr.io/simonbrundin/hitster:dev
+          env:
+            - name: NODE_ENV
+              value: "development"
+            - name: APP_URL
+              value: "https://hitster-dev.simonbrundin.com"
+            - name: SPOTIFY_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: hitster-auth
+                  key: SPOTIFY_CLIENT_ID
+            - name: SPOTIFY_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: hitster-auth
+                  key: SPOTIFY_CLIENT_SECRET

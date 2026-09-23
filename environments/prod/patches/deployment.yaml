@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hitster-app
+spec:
+  template:
+    spec:
+      containers:
+        - name: hitster-app
+          # Updated by .github/workflows/commit.nuxt.yaml.
+          image: >-
+            ghcr.io/simonbrundin/hitster@sha256:a1b2c3d4e5f6789012345678901234567890abcdef1234567890abcdef123456
+          env:
+            - name: NODE_ENV
+              value: "production"
+            - name: APP_URL
+              value: "https://hitster.simonbrundin.com"
+            - name: SPOTIFY_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: hitster-auth
+                  key: SPOTIFY_CLIENT_ID
+            - name: SPOTIFY_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: hitster-auth
+                  key: SPOTIFY_CLIENT_SECRET

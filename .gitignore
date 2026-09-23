@@ -1,0 +1,7 @@
+# Local environment files
+.env
+.env.*
+!.env.example
+
+# Local development TLS certificates
+/src/certs/
