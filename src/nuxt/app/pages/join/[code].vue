@@ -4,7 +4,7 @@ definePageMeta({
 })
 
 useHead({
-  title: 'Join Game - Hitster Battle'
+  title: 'Anslut till spel - Hitster Battle'
 })
 
 const route = useRoute()
@@ -45,10 +45,10 @@ const handleJoin = async () => {
     if (success) {
       router.push('/game')
     } else {
-      joinError.value = 'Could not find a game with this code'
+      joinError.value = 'Kunde inte hitta ett spel med denna kod'
     }
   } catch {
-    joinError.value = 'Failed to join game. Please try again.'
+    joinError.value = 'Det gick inte att ansluta till spelet. Försök igen.'
   } finally {
     isJoining.value = false
   }
@@ -74,7 +74,7 @@ const selectTeam = (teamId: string) => {
         </div>
 
         <div class="inline-flex items-center gap-2 px-4 py-2 bg-neutral-800 rounded-full">
-          <span class="text-neutral-400 text-sm">Joining game:</span>
+          <span class="text-neutral-400 text-sm">Ansluter till spel:</span>
           <code class="text-lg font-mono font-bold text-white">{{ code }}</code>
         </div>
       </div>
@@ -82,16 +82,16 @@ const selectTeam = (teamId: string) => {
       <!-- Join Form -->
       <div class="bg-neutral-900/50 backdrop-blur rounded-2xl p-8 border border-neutral-800">
         <h2 class="text-xl font-bold text-white mb-6">
-          Join the Game
+          Gå med i spelet
         </h2>
 
         <UFormField
-          label="Your Name"
+          label="Ditt namn"
           class="mb-6"
         >
           <UInput
             v-model="playerNameInput"
-            placeholder="Enter your name"
+            placeholder="Ange ditt namn"
             icon="i-lucide-user"
             color="neutral"
             variant="outline"
@@ -101,7 +101,7 @@ const selectTeam = (teamId: string) => {
         </UFormField>
 
         <UFormField
-          label="Select Your Team"
+          label="Välj ditt lag"
           class="mb-6"
         >
           <div class="grid grid-cols-2 gap-3">
@@ -122,7 +122,7 @@ const selectTeam = (teamId: string) => {
               />
               <span class="text-white text-sm font-medium">{{ team.name }}</span>
               <span class="text-xs text-neutral-500">
-                {{ team.members.length }} joined
+                {{ team.members.length }} anslutna
               </span>
             </button>
           </div>
@@ -149,7 +149,7 @@ const selectTeam = (teamId: string) => {
             name="i-lucide-log-in"
             class="w-5 h-5 mr-2"
           />
-          Join Game
+          Gå med
         </UButton>
       </div>
 
@@ -163,7 +163,7 @@ const selectTeam = (teamId: string) => {
             name="i-lucide-arrow-left"
             class="w-4 h-4 inline mr-1"
           />
-          Back to home
+          Tillbaka till startsidan
         </NuxtLink>
       </div>
     </div>

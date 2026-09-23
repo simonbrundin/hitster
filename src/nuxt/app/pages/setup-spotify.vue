@@ -4,11 +4,11 @@ definePageMeta({
 })
 
 useHead({
-  title: 'Connect Spotify — Hitster Battle',
+  title: 'Anslut Spotify — Hitster Battle',
   meta: [
     {
       name: 'description',
-      content: 'Connect your Spotify Developer app to start playing Hitster Battle.'
+      content: 'Anslut din Spotify Developer-app för att börja spela Hitster Battle.'
     }
   ]
 })
@@ -20,10 +20,10 @@ const redirectUri = computed(() => {
 const copied = ref(false)
 
 const steps = [
-  { number: '01', label: 'Create an app' },
-  { number: '02', label: 'Add redirect URI' },
-  { number: '03', label: 'Copy credentials' },
-  { number: '04', label: 'Start playing' }
+  { number: '01', label: 'Skapa en app' },
+  { number: '02', label: 'Lägg till omdirigerings-URI' },
+  { number: '03', label: 'Kopiera inloggningsuppgifter' },
+  { number: '04', label: 'Börja spela' }
 ]
 
 const copyRedirectUri = async () => {
@@ -65,7 +65,7 @@ const copyRedirectUri = async () => {
             name="i-lucide-arrow-left"
             class="h-4 w-4"
           />
-          Back to game
+          Tillbaka till spelet
         </NuxtLink>
       </div>
     </header>
@@ -77,14 +77,14 @@ const copyRedirectUri = async () => {
           <div>
             <div class="mb-6 inline-flex items-center gap-2 rounded-full border border-[#17211d]/10 bg-white px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.16em] text-[#17211d]/60 shadow-sm">
               <span class="h-2 w-2 rounded-full bg-[#1db954]" />
-              Spotify connection
+              Spotify-anslutning
             </div>
             <h1 class="max-w-3xl text-5xl font-semibold leading-[0.98] tracking-[-0.06em] text-[#17211d] sm:text-6xl lg:text-8xl">
-              Your music.<br>
-              <span class="text-[#1db954]">Your game.</span>
+              Din musik.<br>
+              <span class="text-[#1db954]">Ditt spel.</span>
             </h1>
             <p class="mt-7 max-w-xl text-lg leading-8 text-[#17211d]/60">
-              Create a Spotify Developer app in a few minutes, then connect your playlists to Hitster Battle.
+              Skapa en Spotify Developer-app på några minuter, och anslut sedan dina spellistor till Hitster Battle.
             </p>
           </div>
 
@@ -92,7 +92,7 @@ const copyRedirectUri = async () => {
             <div class="mb-8 flex items-start justify-between">
               <div>
                 <p class="text-xs font-semibold uppercase tracking-[0.16em] text-white/45">
-                  Setup time
+                  Installationstid
                 </p>
                 <p class="mt-2 text-4xl font-semibold tracking-tight">
                   ~ 5 min
@@ -108,19 +108,19 @@ const copyRedirectUri = async () => {
                 <Icon
                   name="i-lucide-check"
                   class="h-4 w-4 text-[#b8f36b]"
-                /> No coding required
+                /> Ingen kodning krävs
               </div>
               <div class="flex items-center gap-3">
                 <Icon
                   name="i-lucide-check"
                   class="h-4 w-4 text-[#b8f36b]"
-                /> Works locally on your computer
+                /> Fungerar lokalt på din dator
               </div>
               <div class="flex items-center gap-3">
                 <Icon
                   name="i-lucide-check"
                   class="h-4 w-4 text-[#b8f36b]"
-                /> Your secret stays private
+                /> Din hemlighet förblir privat
               </div>
             </div>
           </div>
@@ -132,7 +132,7 @@ const copyRedirectUri = async () => {
         <div class="mx-auto grid max-w-7xl gap-12 px-5 py-14 lg:grid-cols-[190px_1fr] lg:px-8 lg:py-20">
           <aside class="lg:sticky lg:top-8 lg:self-start">
             <p class="mb-4 text-xs font-bold uppercase tracking-[0.16em] text-[#17211d]/40">
-              On this page
+              På denna sida
             </p>
             <nav class="space-y-3 border-l border-[#17211d]/10 pl-4">
               <a
@@ -150,7 +150,7 @@ const copyRedirectUri = async () => {
               rel="noreferrer"
               class="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-[#1db954] hover:underline"
             >
-              Open Spotify Dashboard
+              Öppna Spotify Dashboard
               <Icon
                 name="i-lucide-arrow-up-right"
                 class="h-4 w-4"
@@ -169,10 +169,10 @@ const copyRedirectUri = async () => {
                 </div>
                 <div>
                   <h2 class="font-semibold">
-                    Before you start
+                    Innan du börjar
                   </h2>
                   <p class="mt-1 text-sm leading-6 text-[#17211d]/60">
-                    You need a Spotify account and the Hitster Battle project running locally. Keep this page open while you configure the app.
+                    Du behöver ett Spotify-konto och Hitster Battle-projektet körs lokalt. Håll denna sida öppen medan du konfigurerar appen.
                   </p>
                 </div>
               </div>
@@ -188,17 +188,17 @@ const copyRedirectUri = async () => {
               </div>
               <div class="step-content">
                 <p class="step-kicker">
-                  First things first
+                  Först och främst
                 </p>
-                <h2>Create a Spotify app</h2>
-                <p>Open the Spotify Developer Dashboard and sign in with your Spotify account.</p>
+                <h2>Skapa en Spotify-app</h2>
+                <p>Öppna Spotify Developer Dashboard och logga in med ditt Spotify-konto.</p>
                 <a
                   href="https://developer.spotify.com/dashboard/"
                   target="_blank"
                   rel="noreferrer"
                   class="primary-action"
                 >
-                  Open Developer Dashboard
+                  Öppna Developer Dashboard
                   <Icon
                     name="i-lucide-arrow-up-right"
                     class="h-4 w-4"
@@ -209,7 +209,7 @@ const copyRedirectUri = async () => {
                     name="i-lucide-lightbulb"
                     class="h-4 w-4 shrink-0 text-[#1db954]"
                   />
-                  <span>Click <strong>Create app</strong>. Use “Hitster Battle” as the app name. The description can be anything.</span>
+                  <span>Klicka på <strong>Skapa app</strong>. Använd "Hitster Battle" som appnamn. Beskrivningen kan vara vad som helst.</span>
                 </div>
               </div>
             </article>
@@ -224,10 +224,10 @@ const copyRedirectUri = async () => {
               </div>
               <div class="step-content">
                 <p class="step-kicker">
-                  Connect the login flow
+                  Anslut inloggningsflödet
                 </p>
-                <h2>Add the redirect URI</h2>
-                <p>In your new app, open <strong>Settings</strong> and find the Redirect URIs section. Add this exact address:</p>
+                <h2>Lägg till omdirigerings-URI</h2>
+                <p>I din nya app öppnar du <strong>Inställningar</strong> och letar upp avsnittet för omdirigerings-URI:er. Lägg till denna exakta adress:</p>
                 <button
                   class="copy-field"
                   type="button"
@@ -239,7 +239,7 @@ const copyRedirectUri = async () => {
                       :name="copied ? 'i-lucide-check' : 'i-lucide-copy'"
                       class="h-4 w-4"
                     />
-                    {{ copied ? 'Copied' : 'Copy' }}
+                    {{ copied ? 'Kopierat' : 'Kopiera' }}
                   </span>
                 </button>
                 <div class="warning-box">
@@ -247,7 +247,7 @@ const copyRedirectUri = async () => {
                     name="i-lucide-triangle-alert"
                     class="h-4 w-4 shrink-0 text-[#b27600]"
                   />
-                  <span>The address must match exactly — including <code>http://</code> and <code>/callback</code>. Click Save in Spotify when you are done.</span>
+                  <span>Adressen måste matcha exakt — inklusive <code>http://</code> och <code>/callback</code>. Klicka på Spara i Spotify när du är klar.</span>
                 </div>
               </div>
             </article>
@@ -262,10 +262,10 @@ const copyRedirectUri = async () => {
               </div>
               <div class="step-content">
                 <p class="step-kicker">
-                  Bring the credentials over
+                  Flytta över inloggningsuppgifterna
                 </p>
-                <h2>Copy your Client ID</h2>
-                <p>Stay in your app settings and copy the <strong>Client ID</strong>. Add it to the <code>.env</code> file in the Nuxt project:</p>
+                <h2>Kopiera ditt Client ID</h2>
+                <p>Stanna i dina appinställningar och kopiera <strong>Client ID</strong>. Lägg till det i <code>.env</code>-filen i Nuxt-projektet:</p>
                 <div class="code-block">
                   <div><span class="code-key">SPOTIFY_CLIENT_ID</span><span class="code-muted">=</span><span class="code-value">your_client_id_here</span></div>
                   <div><span class="code-key">SPOTIFY_CLIENT_SECRET</span><span class="code-muted">=</span><span class="code-value">your_client_secret_here</span></div>
@@ -275,7 +275,7 @@ const copyRedirectUri = async () => {
                     name="i-lucide-shield-check"
                     class="h-4 w-4 shrink-0 text-[#1db954]"
                   />
-                  <span>The Client Secret is sensitive. Never commit it to Git or paste it into the browser.</span>
+                  <span>Client Secret är känsligt. Ladda aldrig upp det till Git eller klistra in det i webbläsaren.</span>
                 </div>
               </div>
             </article>
@@ -290,10 +290,10 @@ const copyRedirectUri = async () => {
               </div>
               <div class="step-content">
                 <p class="step-kicker">
-                  Ready when you are
+                  Redo när du är
                 </p>
-                <h2>Restart and connect</h2>
-                <p>Save your <code>.env</code> file, restart the development server, and sign in from the home page.</p>
+                <h2>Starta om och anslut</h2>
+                <p>Spara din <code>.env</code>-fil, starta om utvecklingsservern och logga in från startsidan.</p>
                 <div class="code-block command-block">
                   <span class="code-prompt">$</span> bun dev
                 </div>
@@ -301,7 +301,7 @@ const copyRedirectUri = async () => {
                   to="/"
                   class="primary-action"
                 >
-                  Go to Hitster Battle
+                  Gå till Hitster Battle
                   <Icon
                     name="i-lucide-arrow-right"
                     class="h-4 w-4"
@@ -312,14 +312,14 @@ const copyRedirectUri = async () => {
 
             <div class="mt-16 border-t border-[#17211d]/10 pt-8">
               <p class="text-sm text-[#17211d]/50">
-                Something not working?
+                Något som inte fungerar?
                 <a
                   href="https://developer.spotify.com/documentation/web-api"
                   target="_blank"
                   rel="noreferrer"
                   class="font-semibold text-[#1db954] hover:underline"
-                >Read Spotify's Web API documentation</a>
-                or check that your redirect URI and credentials match exactly.
+                >Läs Spotifys Web API-dokumentation</a>
+                eller kontrollera att din omdirigerings-URI och inloggningsuppgifter matchar exakt.
               </p>
             </div>
           </div>

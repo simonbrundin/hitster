@@ -4,7 +4,7 @@ definePageMeta({
 })
 
 useHead({
-  title: 'Results - Hitster Battle'
+  title: 'Resultat - Hitster Battle'
 })
 
 const router = useRouter()
@@ -26,11 +26,11 @@ const goHome = () => {
 const shareResults = () => {
   if (!gameState.value) return
 
-  const text = `🎵 Hitster Battle Results!\n\n🏆 Winner: ${gameState.value.winner?.name} with ${gameState.value.winner?.score} points!\n\nJoin at: ${window.location.origin}`
+  const text = `🎵 Hitster Battle-resultat!\n\n🏆 Vinnare: ${gameState.value.winner?.name} med ${gameState.value.winner?.score} poäng!\n\nAnslut på: ${window.location.origin}`
 
   if (navigator.share) {
     navigator.share({
-      title: 'Hitster Battle Results',
+      title: 'Hitster Battle-resultat',
       text
     })
   } else {
@@ -58,10 +58,10 @@ const getMedal = (index: number): string => {
           🎉
         </div>
         <h1 class="text-4xl font-bold text-white mb-2">
-          Game Over!
+          Spelet är slut!
         </h1>
         <p class="text-neutral-400">
-          Final Results
+          Slutresultat
         </p>
       </div>
 
@@ -77,10 +77,10 @@ const getMedal = (index: number): string => {
           {{ gameState.winner.name }}
         </h2>
         <p class="text-4xl font-bold text-yellow-400">
-          {{ gameState.winner.score }} points
+          {{ gameState.winner.score }} poäng
         </p>
         <p class="text-neutral-400 mt-2">
-          Winner!
+          Vinnare!
         </p>
       </div>
 
@@ -88,7 +88,7 @@ const getMedal = (index: number): string => {
       <div class="bg-neutral-900/50 backdrop-blur rounded-2xl border border-neutral-800 overflow-hidden mb-8">
         <div class="p-6 border-b border-neutral-800">
           <h3 class="text-lg font-semibold text-white">
-            Final Standings
+            Slutlig ranking
           </h3>
         </div>
 
@@ -115,7 +115,7 @@ const getMedal = (index: number): string => {
                 {{ team.name }}
               </h4>
               <p class="text-sm text-neutral-400">
-                {{ team.members.length }} {{ team.members.length === 1 ? 'member' : 'members' }}
+                {{ team.members.length }} {{ team.members.length === 1 ? 'medlem' : 'medlemmar' }}
               </p>
             </div>
 
@@ -124,7 +124,7 @@ const getMedal = (index: number): string => {
                 {{ team.score }}
               </p>
               <p class="text-xs text-neutral-500">
-                points
+                poäng
               </p>
             </div>
           </div>
@@ -137,7 +137,7 @@ const getMedal = (index: number): string => {
         class="bg-neutral-900/50 backdrop-blur rounded-2xl border border-neutral-800 p-6 mb-8"
       >
         <h3 class="text-lg font-semibold text-white mb-4">
-          Game Stats
+          Spelstatistik
         </h3>
 
         <div class="grid grid-cols-3 gap-4">
@@ -146,7 +146,7 @@ const getMedal = (index: number): string => {
               {{ gameState.cards.length }}
             </p>
             <p class="text-sm text-neutral-400">
-              Total Cards
+              Totalt antal kort
             </p>
           </div>
           <div class="text-center">
@@ -154,7 +154,7 @@ const getMedal = (index: number): string => {
               {{ gameState.cards.filter(c => c.isGoldenShot).length }}
             </p>
             <p class="text-sm text-neutral-400">
-              Golden Shots
+              Guldkort
             </p>
           </div>
           <div class="text-center">
@@ -162,7 +162,7 @@ const getMedal = (index: number): string => {
               {{ gameState.teams.length }}
             </p>
             <p class="text-sm text-neutral-400">
-              Teams
+              Lag
             </p>
           </div>
         </div>
@@ -179,7 +179,7 @@ const getMedal = (index: number): string => {
             name="i-lucide-refresh-ccw"
             class="w-5 h-5 mr-2"
           />
-          Play Again
+          Spela igen
         </UButton>
 
         <UButton
@@ -192,7 +192,7 @@ const getMedal = (index: number): string => {
             name="i-lucide-share-2"
             class="w-5 h-5 mr-2"
           />
-          Share Results
+          Dela resultat
         </UButton>
 
         <UButton
@@ -205,7 +205,7 @@ const getMedal = (index: number): string => {
             name="i-lucide-home"
             class="w-5 h-5 mr-2"
           />
-          Home
+          Hem
         </UButton>
       </div>
     </div>

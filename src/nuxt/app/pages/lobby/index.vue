@@ -6,7 +6,7 @@ definePageMeta({
 })
 
 useHead({
-  title: 'Create Game - Hitster Battle'
+  title: 'Skapa spel - Hitster Battle'
 })
 
 const { isAuthenticated, fetchPlaylistTracks } = useSpotify()
@@ -16,7 +16,7 @@ const router = useRouter()
 
 // Game setup state
 const step = ref<'teams' | 'playlist' | 'ready'>('teams')
-const teamNames = ref<string[]>(['Team 1', 'Team 2'])
+const teamNames = ref<string[]>(['Lag 1', 'Lag 2'])
 const rulesMode = ref<GameRulesMode>('original')
 const tracks = ref<SpotifyTrack[]>([])
 const isLoadingTracks = ref(false)
@@ -69,19 +69,19 @@ const launchGame = async () => {
   launchError.value = ''
 
   if (!gameState.value) {
-    launchError.value = 'Game session is missing. Please start again from the Teams step.'
+    launchError.value = 'Spelsessionen saknas. Börja om från steget med lag.'
     return
   }
 
   if (tracks.value.length < 10) {
-    launchError.value = `This playlist only has ${tracks.value.length} usable tracks. Choose a playlist with at least 10 tracks.`
+    launchError.value = `Den här spellistan har bara ${tracks.value.length} användbara låtar. Välj en spellista med minst 10 låtar.`
     return
   }
 
   const started = await initializeGame(tracks.value)
 
   if (!started) {
-    launchError.value = 'The game could not be started. Please choose another playlist and try again.'
+    launchError.value = 'Spelet kunde inte startas. Välj en annan spellista och försök igen.'
     return
   }
 
@@ -109,7 +109,7 @@ onMounted(() => {
             name="i-lucide-arrow-left"
             class="h-4 w-4"
           />
-          <span>Back to home</span>
+          <span>Tillbaka till startsidan</span>
         </NuxtLink>
 
         <div class="flex items-center gap-2 text-sm font-bold tracking-tight">
@@ -132,7 +132,7 @@ onMounted(() => {
             />
             <span v-else>1</span>
           </div>
-          <span class="font-medium">Teams</span>
+          <span class="font-medium">Lag</span>
         </div>
 
         <Icon
@@ -149,7 +149,7 @@ onMounted(() => {
             />
             <span v-else>2</span>
           </div>
-          <span class="font-medium">Playlist</span>
+          <span class="font-medium">Spellista</span>
         </div>
 
         <Icon
@@ -161,7 +161,7 @@ onMounted(() => {
           <div :class="['w-8 h-8 rounded-full flex items-center justify-center font-bold', step === 'ready' ? 'bg-[#1db954] text-white' : 'bg-neutral-800']">
             <span>3</span>
           </div>
-          <span class="font-medium">Ready!</span>
+          <span class="font-medium">Klart!</span>
         </div>
       </div>
 
@@ -227,7 +227,7 @@ onMounted(() => {
               class="mb-4 h-12 w-12 animate-spin text-[#1db954]"
             />
             <p class="text-neutral-400">
-              Loading playlist tracks...
+              Laddar låtar från spellistan...
             </p>
           </div>
 
@@ -258,17 +258,17 @@ onMounted(() => {
               />
             </div>
             <h2 class="text-2xl font-bold text-white mb-2">
-              All Set!
+              Allt klart!
             </h2>
             <p class="text-neutral-400">
-              {{ tracks.length }} tracks loaded from your playlist
+              {{ tracks.length }} låtar laddade från din spellista
             </p>
           </div>
 
           <!-- Game Code Preview -->
           <div class="bg-neutral-800 rounded-xl p-6 mb-8">
             <p class="text-neutral-400 text-sm mb-2">
-              Game Code
+              Spelkod
             </p>
             <GameCode
               v-if="gameState"
@@ -318,7 +318,7 @@ onMounted(() => {
               name="i-lucide-rocket"
               class="mr-2 h-5 w-5"
             />
-            Launch Game
+            Starta spelet
           </UButton>
         </div>
       </div>

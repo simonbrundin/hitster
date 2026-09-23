@@ -9,7 +9,7 @@ const emit = defineEmits<{
   (e: 'update:teams' | 'start', teams: string[]): void
 }>()
 
-const teams = ref<string[]>(props.initialTeams?.length ? [...props.initialTeams] : ['Team 1', 'Team 2'])
+const teams = ref<string[]>(props.initialTeams?.length ? [...props.initialTeams] : ['Lag 1', 'Lag 2'])
 const min = props.minTeams ?? 2
 const max = props.maxTeams ?? 4
 
@@ -17,7 +17,7 @@ const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4']
 
 const addTeam = () => {
   if (teams.value.length < max) {
-    teams.value.push(`Team ${teams.value.length + 1}`)
+    teams.value.push(`Lag ${teams.value.length + 1}`)
   }
 }
 
@@ -44,7 +44,7 @@ const handleStart = () => {
   <div class="space-y-6">
     <div class="flex items-center justify-between">
       <h3 class="text-2xl font-semibold tracking-tight text-[#17211d]">
-        Setup your teams
+        Ställ in era lag
       </h3>
       <UButton
         v-if="teams.length < max"
@@ -53,7 +53,7 @@ const handleStart = () => {
         size="sm"
         @click="addTeam"
       >
-        Add Team
+        Lägg till lag
       </UButton>
     </div>
 
@@ -70,7 +70,7 @@ const handleStart = () => {
 
         <UInput
           :model-value="team"
-          :placeholder="`Team ${index + 1}`"
+          :placeholder="`Lag ${index + 1}`"
           color="neutral"
           variant="outline"
           class="flex-1"
@@ -99,7 +99,7 @@ const handleStart = () => {
           name="i-lucide-play"
           class="w-5 h-5 mr-2"
         />
-        Start Game
+        Starta spelet
       </UButton>
     </div>
   </div>

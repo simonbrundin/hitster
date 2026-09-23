@@ -1,7 +1,7 @@
 <script setup lang="ts">
 definePageMeta({ layout: false })
 
-useHead({ title: 'Playing - Hitster Battle' })
+useHead({ title: 'Spelar - Hitster Battle' })
 
 const { isAuthenticated } = useSpotify()
 const {

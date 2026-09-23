@@ -15,7 +15,7 @@ defineEmits<{ (e: 'show-results'): void }>()
         🎉
       </div>
       <h2 class="text-2xl font-bold">
-        Game Over!
+        Spelet är slut!
       </h2>
       <p class="mt-1 text-neutral-400">
         {{ winner?.name }} vinner!

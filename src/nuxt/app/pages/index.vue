@@ -2,9 +2,9 @@
 definePageMeta({ layout: false })
 
 useHead({
-  title: 'Hitster Battle — Music timeline game',
+  title: 'Hitster Battle — Musik-tidslinjespel',
   meta: [
-    { name: 'description', content: 'Turn your Spotify playlists into a multiplayer music timeline game.' }
+    { name: 'description', content: 'Förvandla dina Spotify-spellistor till ett flerspelarmusik-tidslinjespel.' }
   ]
 })
 
@@ -14,25 +14,25 @@ const { gameState } = useGame()
 const features = [
   {
     icon: 'i-lucide-users',
-    title: 'Teams, not accounts',
-    description: 'Split into teams and invite everyone with one simple game code.'
+    title: 'Bilda era lag',
+    description: 'Dela upp er i lag och bjud in alla med en enkel spelkod.'
   },
   {
     icon: 'i-lucide-headphones',
-    title: 'Your soundtrack',
-    description: 'Use a Spotify playlist everyone knows — or discover something new.'
+    title: 'Använd en egen spellista',
+    description: 'Använd en Spotify-spellista som alla känner till — eller upptäck något nytt.'
   },
   {
     icon: 'i-lucide-trophy',
-    title: 'One timeline to rule',
-    description: 'Place songs in the right order and earn points for every good guess.'
+    title: 'Placera på tidslinje',
+    description: 'Placera låtarna i rätt ordning och tjäna poäng för varje rätt gissning.'
   }
 ]
 
 const gameSteps = [
-  ['01', 'Create a room', 'Choose your teams and share the game code.'],
-  ['02', 'Pick a playlist', 'Bring in the songs that will define your night.'],
-  ['03', 'Build the timeline', 'Listen, guess and place each song by release year.']
+  ['01', 'Skapa ett rum', 'Välj era lag och dela spelkoden.'],
+  ['02', 'Välj en spellista', 'Ta med låtarna som ska definiera kvällen.'],
+  ['03', 'Bygg tidslinjen', 'Lyssna, gissa och placera varje låt efter utgivningsår.']
 ]
 
 onMounted(() => {
@@ -63,20 +63,25 @@ onMounted(() => {
             to="/setup-spotify"
             class="text-xs font-medium text-[#17211d]/55 hover:text-[#17211d]"
           >
-            How to connect
+            Så här ansluter du
           </NuxtLink>
           <ClientOnly>
-            <NuxtLink
-              v-if="isAuthenticated"
-              to="/lobby"
-              class="flex items-center gap-1.5 rounded-full bg-[#17211d] px-4 py-2 text-xs font-bold text-white transition hover:bg-[#1db954] hover:text-[#17211d]"
-            >
-              <span>Play</span>
-              <Icon
-                name="i-lucide-arrow-right"
-                class="h-3.5 w-3.5"
-              />
-            </NuxtLink>
+            <div class="flex items-center gap-2">
+              <NuxtLink
+                v-if="isAuthenticated"
+                to="/lobby"
+                class="flex items-center gap-1.5 rounded-full bg-[#17211d] px-4 py-2 text-xs font-bold text-white transition hover:bg-[#1db954] hover:text-[#17211d]"
+              >
+                <span>Nytt spel</span>
+              </NuxtLink>
+              <NuxtLink
+                v-if="isAuthenticated && gameState?.status === 'playing'"
+                to="/game"
+                class="flex items-center gap-1.5 rounded-full border border-[#17211d]/20 px-4 py-2 text-xs font-bold text-[#17211d] transition hover:border-[#17211d] hover:bg-[#17211d] hover:text-white"
+              >
+                <span>Fortsätt spel</span>
+              </NuxtLink>
+            </div>
           </ClientOnly>
         </div>
       </div>
@@ -89,18 +94,18 @@ onMounted(() => {
           <!-- Eyebrow -->
           <div class="mb-3 flex items-center gap-2">
             <span class="h-2 w-2 rounded-full bg-[#1db954]" />
-            <span class="text-[10px] font-extrabold tracking-widest text-[#17211d]/50">ONLINE MUSIC TIMELINE</span>
+            <span class="text-[10px] font-extrabold tracking-widest text-[#17211d]/50">MUSIK-TIDSLINJE ONLINE</span>
           </div>
 
           <!-- Headline -->
           <h1 class="text-3xl font-semibold leading-tight tracking-tight sm:text-5xl lg:text-[3.5rem]">
-            Turn your playlist into a
-            <span class="text-[#1db954]">battlefield.</span>
+            <span class="text-[#1db954]">Spela Hitster utan kort</span><br>
+            med valfri Spotify-spellista
           </h1>
 
           <!-- Subhead -->
           <p class="mt-3 max-w-md text-sm leading-relaxed text-[#17211d]/55 sm:mt-5 sm:text-base">
-            Hitster Battle is the fast, chaotic music game for people who think they know when every song came out.
+            Hitster Battle är det snabba, kaotiska musiksspelet för folk som tror att de vet när varje låt kom ut. Nu utan fysiska kort!
           </p>
 
           <!-- CTA buttons -->
@@ -111,7 +116,7 @@ onMounted(() => {
                 to="/game"
                 class="cta-primary"
               >
-                Resume game
+Fortsätt spel
                 <Icon
                   name="i-lucide-arrow-right"
                   class="h-4 w-4"
@@ -122,7 +127,7 @@ onMounted(() => {
                 to="/lobby"
                 class="cta-primary"
               >
-                Start a new game
+Starta nytt spel
                 <Icon
                   name="i-lucide-arrow-right"
                   class="h-4 w-4"
@@ -133,7 +138,7 @@ onMounted(() => {
                 href="#connect"
                 class="cta-primary"
               >
-                Connect Spotify
+                Anslut Spotify
                 <Icon
                   name="i-lucide-arrow-down"
                   class="h-4 w-4"
@@ -145,13 +150,13 @@ onMounted(() => {
               v-if="gameState?.status === 'playing'"
               class="mt-3 text-xs font-medium text-[#1db954]"
             >
-              Game code: <span class="font-mono">{{ gameState.code }}</span>
-              · {{ gameState.cards.filter(c => !c.isRevealed).length }} cards left
+              Spelkod: <span class="font-mono">{{ gameState.code }}</span>
+              · {{ gameState.cards.filter(c => !c.isRevealed).length }} kort kvar
             </p>
           </ClientOnly>
 
           <p class="mt-4 text-[10px] font-medium text-[#17211d]/35 sm:mt-6">
-            2–4 teams · 10 minutes to learn · endless arguments
+            2–4 lag · 10 minuter att lära sig · oändliga diskussioner
           </p>
         </div>
       </section>
@@ -165,10 +170,10 @@ onMounted(() => {
           <div class="mb-5 flex items-start justify-between">
             <div>
               <p class="text-[10px] font-bold uppercase tracking-widest text-white/45">
-                Ready to play?
+                redo att spela?
               </p>
               <h2 class="mt-1.5 text-2xl font-semibold tracking-tight text-white sm:text-3xl">
-                Bring the music.
+                Hämta musiken.
               </h2>
             </div>
             <span class="flex h-10 w-10 items-center justify-center rounded-full bg-[#1db954] text-white">
@@ -200,19 +205,19 @@ onMounted(() => {
                 </span>
                 <div>
                   <p class="font-semibold text-white">
-                    Spotify is connected
+                    Spotify är ansluten
                   </p>
                   <p class="mt-0.5 text-xs text-white/50">
-                    Your playlists are ready to use.
+                    Dina spellistor är redo att använda.
                   </p>
                 </div>
               </div>
               <div class="mt-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                 <NuxtLink
-                  to="/lobby"
+                  :to="gameState?.status === 'playing' ? '/game' : '/lobby'"
                   class="card-action"
                 >
-                  Choose a playlist
+                  {{ gameState?.status === 'playing' ? 'Fortsätt spel' : 'Starta nytt spel' }}
                   <Icon
                     name="i-lucide-arrow-right"
                     class="h-4 w-4"
@@ -226,7 +231,7 @@ onMounted(() => {
                     name="i-lucide-log-out"
                     class="h-4 w-4"
                   />
-                  Disconnect
+                  Koppla från
                 </button>
               </div>
             </div>
@@ -237,7 +242,7 @@ onMounted(() => {
             to="/setup-spotify"
             class="mt-4 flex items-center justify-center gap-1.5 text-xs text-white/35 transition hover:text-[#b8f36b]"
           >
-            Need help setting up?
+            Behöver du hjälp med att komma igång?
             <Icon
               name="i-lucide-arrow-up-right"
               class="h-3.5 w-3.5"
@@ -275,13 +280,13 @@ onMounted(() => {
         <div class="sm:grid sm:grid-cols-[0.7fr_1.3fr] sm:gap-12">
           <div class="mb-8 sm:mb-0">
             <p class="eyebrow">
-              HOW IT WORKS
+              SÅ HÄR FUNGERAR DET
             </p>
             <h2 class="mt-3 text-2xl font-semibold leading-tight tracking-tight text-[#17211d] sm:mt-4 sm:text-4xl">
-              Simple rules.<br><span class="text-[#1db954]">Loud opinions.</span>
+              Enkla regler.<br><span class="text-[#1db954]">Högljudda åsikter.</span>
             </h2>
             <p class="mt-3 max-w-xs text-sm leading-relaxed text-[#17211d]/55">
-              No trivia knowledge needed. Just listen closely, trust your instincts and place the song where you think it belongs.
+              Inga trivia-kunskaper behövs. Lyssna noga, lita på din magkänsla och placera låten där du tror den hör hemma.
             </p>
           </div>
 
@@ -313,7 +318,7 @@ onMounted(() => {
     <footer class="border-t border-[#17211d]/10 px-4 py-5">
       <div class="mx-auto flex max-w-5xl flex-col items-center justify-between gap-2 text-[10px] font-medium text-[#17211d]/35 sm:flex-row">
         <span>HITSTER BATTLE</span>
-        <span>Powered by Spotify · Built with Nuxt</span>
+        <span>Drivs av Spotify · Byggt med Nuxt</span>
       </div>
     </footer>
   </div>
