@@ -15,8 +15,7 @@ An online multiplayer music timeline game inspired by Hitster, built with Nuxt a
 
 ### Prerequisites
 
-- Node.js 18+
-- pnpm (or npm/yarn)
+- Bun 1.4+
 - A Spotify Developer account
 
 ### Setup
@@ -25,7 +24,7 @@ An online multiplayer music timeline game inspired by Hitster, built with Nuxt a
 
 ```bash
 cd src/nuxt
-pnpm install
+bun install
 ```
 
 2. **Create a Spotify Application:**
@@ -51,7 +50,7 @@ SPOTIFY_CLIENT_SECRET=your_client_secret_here
 4. **Start the development server:**
 
 ```bash
-pnpm dev
+bun dev
 ```
 
 5. **Open [https://127.0.0.1:3000](https://127.0.0.1:3000)**
@@ -134,16 +133,16 @@ src/nuxt/
 
 ```bash
 # Start development server
-pnpm dev
+bun dev
 
 # Build for production
-pnpm build
+bun run build
 
 # Type check
-pnpm typecheck
+bun run typecheck
 
 # Lint
-pnpm lint
+bun run lint
 ```
 
 ## License

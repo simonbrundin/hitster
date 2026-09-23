@@ -4,40 +4,37 @@ on: push
 
 jobs:
   ci:
-    runs-on: ${{ matrix.os }}
-
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        node: [22]
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@v4
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v6
-
-      - name: Install node
-        uses: actions/setup-node@v7
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v2
         with:
-          node-version: ${{ matrix.node }}
-          cache: pnpm
+          bun-version: 1.4.2
 
       - name: Install dependencies
-        run: pnpm install
+        run: bun install --frozen-lockfile
+        working-directory: src/nuxt
 
       - name: Lint
-        run: pnpm run lint
+        run: bun run lint
+        working-directory: src/nuxt
 
       - name: Typecheck
-        run: pnpm run typecheck
+        run: bun run typecheck
+        working-directory: src/nuxt
 
       - name: Test
-        run: pnpm run test
+        run: bun test
+        working-directory: src/nuxt
 
       - name: Build
-        run: pnpm run build
+        run: bun run build
+        working-directory: src/nuxt
 
       - name: Audit production dependencies
-        run: pnpm audit --prod
+        run: bun audit --production
+        working-directory: src/nuxt

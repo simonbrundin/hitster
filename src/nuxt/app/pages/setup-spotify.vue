@@ -295,7 +295,7 @@ const copyRedirectUri = async () => {
                 <h2>Restart and connect</h2>
                 <p>Save your <code>.env</code> file, restart the development server, and sign in from the home page.</p>
                 <div class="code-block command-block">
-                  <span class="code-prompt">$</span> pnpm dev
+                  <span class="code-prompt">$</span> bun dev
                 </div>
                 <NuxtLink
                   to="/"

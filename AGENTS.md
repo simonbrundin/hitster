@@ -1,5 +1,11 @@
 # Hitster-regler och implementation
 
+## Pakethanterare
+
+- Använd alltid **Bun** som pakethanterare i dev, production, Docker och GitHub Actions.
+- Använd inte pnpm, npm eller yarn.
+- Projektets låsfil är `src/nuxt/bun.lock`.
+
 Följ den svenska officiella Hitster Original-regeln när spelet ändras. Källa:
 
 - https://nordics.hitstergame.com/sv-se/how-to-play/

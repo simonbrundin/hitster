@@ -1,42 +1,35 @@
 # ==============================
 # Build Stage
 # ==============================
-FROM node:22-alpine AS build
+FROM oven/bun:1.4.2-alpine AS build
 WORKDIR /app
 
 RUN apk add --no-cache python3 make g++ gcc
 
-# Kopiera package files
-COPY package.json pnpm-lock.yaml* ./
+# Copy package metadata first for better layer caching.
+COPY package.json bun.lock ./
 
-# Installera pnpm globalt
-RUN npm install -g pnpm
+RUN bun install --frozen-lockfile
 
-# Installera beroenden (cache-vänligt)
-RUN pnpm install --frozen-lockfile
-
-# Kopiera källkod (efter install för bättre cache)
+# Copy source code after installing dependencies.
 COPY . .
 
-# Bygg applikationen
-RUN pnpm run build
+RUN bun run build
 
 # ==============================
-# Runtime Stage (minimal, säker)
+# Runtime Stage (minimal, secure)
 # ==============================
-FROM node:22-alpine AS production
+FROM oven/bun:1.4.2-alpine AS production
 
 WORKDIR /app
 
-# Kör Nitro med Node.js
-USER node
+USER bun
 
-# Kopiera bara det som behövs för runtime
-COPY --from=build --chown=node:node /app/.output .
+COPY --from=build --chown=bun:bun /app/.output .
 
 EXPOSE 3000
 
 ENV HOST=0.0.0.0
 ENV PORT=3000
 
-CMD ["node", "server/index.mjs"]
+CMD ["bun", "server/index.mjs"]
