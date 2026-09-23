@@ -7,6 +7,7 @@ const props = defineProps<{
   turnPhase: string
   isLockInVariant: boolean
   isViewerTurn: boolean
+  isController: boolean
   currentTeamHitsterCards: number
   currentCard: GameCard | undefined
   placedCards: GameCard[]
@@ -114,7 +115,7 @@ const phaseLabel = computed(() => {
 
     <!-- Phase: decision (lock-in variant) -->
     <div
-      v-else-if="turnPhase === 'decision' && isLockInVariant && isViewerTurn"
+      v-else-if="turnPhase === 'decision' && isLockInVariant && (isViewerTurn || isController)"
       class="space-y-2"
     >
       <p class="text-center text-xs text-green-300">

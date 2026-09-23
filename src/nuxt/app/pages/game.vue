@@ -49,10 +49,31 @@ const {
   onDrop,
   onDragEnd,
   onTouchStart,
-  suppressClick
+  dragPreviewSlot,
+  suppressClick,
+  getDragRevealedCard
 } = useTimelineDrag()
 
 const timelineLength = computed(() => timelineCards.value.length)
+
+const displayTimelineCards = computed(() => {
+  const slot = dragPreviewSlot.value
+  const dragCard = getDragRevealedCard?.()
+  let cards = [...timelineCards.value]
+
+  // Add the local drag card so it appears in the timeline immediately
+  if (dragCard && !cards.some(c => c.id === dragCard.id)) {
+    cards = [...cards, dragCard]
+  }
+
+  if (!dragCard || slot === null) return cards
+
+  // Remove the drag card from its current position and insert at the target slot
+  const remaining = cards.filter(c => c.id !== dragCard.id)
+  const boundedSlot = Math.max(0, Math.min(slot, remaining.length))
+  remaining.splice(boundedSlot, 0, { ...dragCard, position: boundedSlot })
+  return remaining
+})
 
 // ── Spotify playback ────────────────────────────────────────────────────────
 
@@ -140,7 +161,7 @@ const handlePlayClick = async () => {
 }
 
 const placeCurrentCard = () => {
-  if (suppressClick.value || turnPhase.value !== 'placing' || !isViewerTurn.value) return
+  if (suppressClick.value || turnPhase.value !== 'placing' || (!isViewerTurn.value && !isHost.value)) return
   if (currentCard.value) placeCard(currentCard.value.id, timelineLength.value)
 }
 
@@ -150,6 +171,10 @@ const goToResults = () => router.push('/results')
 
 const handleCardDragStart = (event: DragEvent) => {
   onDragStart(event, timelineLength.value)
+}
+
+const handleTimelineCardDragOver = (event: DragEvent, index: number) => {
+  onDragOver(event, index)
 }
 
 const handleCardTouchStart = (_event?: TouchEvent) => {
@@ -179,6 +204,7 @@ const handleDrop = (event: DragEvent) => {
       :turn-phase="turnPhase"
       :is-lock-in-variant="isLockInVariant"
       :is-viewer-turn="isViewerTurn"
+      :is-controller="isHost"
       :current-team-hitster-cards="currentTeamHitsterCards"
       :current-card="currentCard"
       :placed-cards="placedCards"
@@ -244,7 +270,7 @@ const handleDrop = (event: DragEvent) => {
               {{ lastMessage }}
             </p>
             <button
-              v-if="isViewerTurn"
+              v-if="isViewerTurn || isHost"
               class="mt-4 w-full rounded-xl bg-white/15 py-3 font-bold text-white transition hover:bg-white/25"
               @click="handleNextTurn"
             >
@@ -263,12 +289,13 @@ const handleDrop = (event: DragEvent) => {
 
         <!-- Timeline cards -->
         <GameTimelineCard
-          v-for="(card, index) in timelineCards"
-          :key="card.id"
+          v-for="(card, index) in displayTimelineCards"
+          :key="index"
           :card="card"
           :index="index"
           :turn-phase="turnPhase"
           @drag-start="handleCardDragStart"
+          @drag-over="handleTimelineCardDragOver"
           @drag-end="onDragEnd"
           @touch-start="handleCardTouchStart"
         />

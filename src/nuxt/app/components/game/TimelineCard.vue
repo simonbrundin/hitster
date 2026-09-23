@@ -9,6 +9,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (e: 'drag-start' | 'drag-end', event: DragEvent): void
+  (e: 'drag-over', event: DragEvent, index: number): void
   (e: 'touch-start', event: TouchEvent): void
 }>()
 
@@ -19,6 +20,7 @@ const isDragging = computed(() => !isLocked.value && !props.card.revealed)
 function onCardDragOver(event: DragEvent) {
   event.preventDefault()
   if (event.dataTransfer) event.dataTransfer.dropEffect = 'move'
+  emit('drag-over', event, props.index)
 }
 </script>
 

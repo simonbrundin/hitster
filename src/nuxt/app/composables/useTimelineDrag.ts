@@ -6,63 +6,121 @@ import { useGame } from './useGame'
  * Works with both pointer drag events and touch events.
  */
 export function useTimelineDrag() {
-  const { placeCard, moveCard, unplaceCard, isCurrentViewerTurn } = useGame()
+  const {
+    placeCard,
+    moveCard,
+    unplaceCard,
+    getTimelineCards,
+    isCurrentViewerTurn,
+    isHost,
+    gameState
+  } = useGame()
 
-  const draggedCardId = ref<string | null>(null)
-  const dragStartedNewCard = ref(false)
-  const dropHandled = ref(false)
-  const touchDragCardId = ref<string | null>(null)
-  const touchMoved = ref(false)
+  // ── Local drag state (separate from server) ──────────────────────────────
+
+  /** Card being dragged (its hidden original + a revealed local copy) */
+  const _dragCard = ref<{
+    id: string
+    revealed: GameCard // local copy with isRevealed=true for timeline display
+    slot: number // last intended slot position
+    startedNew: boolean // whether this was a new (hidden) card
+  } | null>(null)
+
   const suppressClick = ref(false)
+
+  const dragPreviewSlot = computed(() => _dragCard.value?.slot ?? null)
+  const draggedCardId = computed(() => _dragCard.value?.id ?? null)
 
   // ── Query helpers ─────────────────────────────────────────────────────────
 
   const getCurrentCard = (): GameCard | undefined => {
-    const state = useGame().gameState.value
+    const state = gameState.value
     if (!state) return undefined
     return state.cards.find(card => !card.isRevealed && !card.isDiscarded)
   }
 
   const getPlacedCards = (): GameCard[] => {
-    const state = useGame().gameState.value
+    const state = gameState.value
     if (!state) return []
     return state.cards
       .filter(card => card.isRevealed && !card.revealed && !card.isDiscarded)
       .sort((a, b) => (a.position ?? 0) - (b.position ?? 0))
   }
 
+  const canControlTimeline = () => isCurrentViewerTurn() || isHost.value
+
   const getDraggableCard = (): GameCard | null => {
-    if (!isCurrentViewerTurn()) return null
-    const phase = useGame().gameState.value?.turnPhase
+    if (!canControlTimeline()) return null
+    const phase = gameState.value?.turnPhase
     if (phase === 'checking') return getPlacedCards()[0] ?? null
     if (phase === 'placing') return getCurrentCard() ?? null
     return null
   }
 
   const getCurrentPhase = (): string => {
-    return useGame().gameState.value?.turnPhase ?? 'placing'
+    return gameState.value?.turnPhase ?? 'placing'
+  }
+
+  // ── Shared helpers ───────────────────────────────────────────────────────
+
+  const getSlotFromPointer = (clientX: number, clientY: number, timelineLength: number) => {
+    const target = document.elementFromPoint(clientX, clientY)
+    const row = target?.closest<HTMLElement>('[data-timeline-index]')
+    if (!row) return timelineLength
+    const index = Number(row.dataset.timelineIndex)
+    const rect = row.getBoundingClientRect()
+    return clientY < rect.top + rect.height / 2 ? index : index + 1
+  }
+
+  const beginDrag = (card: GameCard, timelineLength: number, isNewCard: boolean) => {
+    const slot = isNewCard ? timelineLength : getTimelineCards().findIndex(c => c.id === card.id)
+    _dragCard.value = {
+      id: card.id,
+      revealed: {
+        ...card,
+        isRevealed: true,
+        position: slot,
+        revealed: false,
+        isCorrect: false,
+        isLocked: false,
+        lockedByTeamId: null
+      },
+      slot,
+      startedNew: isNewCard
+    }
+  }
+
+  const updateDragSlot = (slot: number) => {
+    if (!_dragCard.value) return
+    _dragCard.value.slot = slot
+    // Also update the revealed card's position for correct ordering
+    _dragCard.value.revealed = {
+      ..._dragCard.value.revealed,
+      position: slot
+    }
+  }
+
+  const endDrag = () => {
+    _dragCard.value = null
   }
 
   // ── Pointer drag ─────────────────────────────────────────────────────────
 
   const onDragStart = (event: DragEvent, timelineLength: number) => {
-    if (!isCurrentViewerTurn()) return
+    if (!canControlTimeline()) return
     const phase = getCurrentPhase()
-    if (phase === 'checking') {
-      draggedCardId.value = getPlacedCards()[0]?.id ?? null
-    } else if (phase === 'placing') {
-      draggedCardId.value = getCurrentCard()?.id ?? null
-    }
+    const card = phase === 'checking'
+      ? getPlacedCards()[0]
+      : getCurrentCard()
 
-    if (!draggedCardId.value || !event.dataTransfer) return
+    if (!card || !event.dataTransfer) return
 
-    dragStartedNewCard.value = phase === 'placing'
-    dropHandled.value = false
-    event.dataTransfer.setData('text/plain', draggedCardId.value)
+    beginDrag(card, timelineLength, phase === 'placing')
+    event.dataTransfer.setData('text/plain', card.id)
     event.dataTransfer.effectAllowed = 'move'
 
-    if (dragStartedNewCard.value) {
-      placeCard(draggedCardId.value, timelineLength)
+    if (_dragCard.value?.startedNew) {
+      placeCard(card.id, timelineLength)
     }
   }
 
@@ -71,15 +129,13 @@ export function useTimelineDrag() {
     event.stopPropagation()
     if (event.dataTransfer) event.dataTransfer.dropEffect = 'move'
 
-    const cardId = draggedCardId.value
-    if (!cardId) return
+    const target = event.target as Element | null
+    const row = target?.closest<HTMLElement>('[data-timeline-index]')
+    const slot = row
+      ? (event.clientY < row.getBoundingClientRect().top + row.getBoundingClientRect().height / 2 ? index : index + 1)
+      : index
 
-    const target = event.currentTarget as HTMLElement
-    const rect = target?.getBoundingClientRect()
-    if (!rect || !target) return
-
-    const slot = event.clientY < rect.top + rect.height / 2 ? index : index + 1
-    moveCard(cardId, slot)
+    updateDragSlot(slot)
   }
 
   const onDrop = (event: DragEvent, timelineLength: number) => {
@@ -88,37 +144,34 @@ export function useTimelineDrag() {
     if (!cardId) return
 
     const target = event.target as Element | null
-    const droppedOnRow = target?.closest('[data-timeline-index]')
-    if (!droppedOnRow) {
+    const row = target?.closest<HTMLElement>('[data-timeline-index]')
+    const slot = row
+      ? (event.clientY < row.getBoundingClientRect().top + row.getBoundingClientRect().height / 2
+          ? Number(row.dataset.timelineIndex)
+          : Number(row.dataset.timelineIndex) + 1)
+      : timelineLength
+
+    if (_dragCard.value?.startedNew) {
       if (getCurrentPhase() === 'checking') {
-        moveCard(cardId, timelineLength)
+        moveCard(cardId, slot)
       } else {
-        placeCard(cardId, timelineLength)
+        placeCard(cardId, slot)
       }
+    } else if (getCurrentPhase() === 'checking') {
+      moveCard(cardId, slot)
     }
-    dropHandled.value = true
+
+    endDrag()
   }
 
   const onDragEnd = (_event?: DragEvent) => {
-    if (dragStartedNewCard.value && !dropHandled.value && draggedCardId.value) {
-      unplaceCard(draggedCardId.value)
+    if (_dragCard.value?.startedNew && !draggedCardId.value) {
+      unplaceCard(_dragCard.value.id)
     }
-    draggedCardId.value = null
-    dragStartedNewCard.value = false
-    dropHandled.value = false
+    endDrag()
   }
 
-  // ── Touch drag ────────────────────────────────────────────────────────────
-
-  const getTouchSlot = (touch: Touch, timelineLength: number) => {
-    const target = document.elementFromPoint(touch.clientX, touch.clientY)
-    const cardElement = target?.closest<HTMLElement>('[data-timeline-index]')
-    if (!cardElement) return timelineLength
-
-    const index = Number(cardElement.dataset.timelineIndex)
-    const rect = cardElement.getBoundingClientRect()
-    return touch.clientY < rect.top + rect.height / 2 ? index : index + 1
-  }
+  // ── Touch drag ──────────────────────────────────────────────────────────
 
   let _touchMoveHandler: ((e: TouchEvent) => void) | null = null
   let _touchEndHandler: ((e: TouchEvent) => void) | null = null
@@ -127,41 +180,32 @@ export function useTimelineDrag() {
     const card = getDraggableCard()
     if (!card) return
 
-    touchDragCardId.value = card.id
-    touchMoved.value = false
+    beginDrag(card, timelineLength, getCurrentPhase() === 'placing')
 
     _touchMoveHandler = (event: TouchEvent) => {
       const touch = event.touches[0]
-      const cardId = touchDragCardId.value
-      if (!touch || !cardId) return
+      if (!touch || !_dragCard.value) return
       event.preventDefault()
-      touchMoved.value = true
+      const slot = getSlotFromPointer(touch.clientX, touch.clientY, timelineLength)
+      updateDragSlot(slot)
 
-      if (getCurrentPhase() === 'placing') {
-        const currentCard = getCurrentCard()
-        if (currentCard && currentCard.id === cardId) {
-          placeCard(currentCard.id, timelineLength)
-        }
-      } else {
-        moveCard(cardId, getTouchSlot(touch, timelineLength))
+      // Place the new card on the first movement
+      if (_dragCard.value.startedNew && getCurrentPhase() === 'placing') {
+        placeCard(_dragCard.value.id, timelineLength)
       }
     }
 
     _touchEndHandler = (event: TouchEvent) => {
-      if (!touchMoved.value) {
-        touchDragCardId.value = null
-        return
-      }
       const touch = event.changedTouches[0]
-      if (touch && touchDragCardId.value) {
-        moveCard(touchDragCardId.value, getTouchSlot(touch, timelineLength))
+      if (touch && _dragCard.value && getCurrentPhase() === 'checking') {
+        const slot = getSlotFromPointer(touch.clientX, touch.clientY, timelineLength)
+        moveCard(_dragCard.value.id, slot)
       }
-      touchDragCardId.value = null
+      endDrag()
       suppressClick.value = true
-      const clearSuppress = () => {
+      window.setTimeout(() => {
         suppressClick.value = false
-      }
-      window.setTimeout(clearSuppress, 0)
+      }, 0)
     }
 
     document.addEventListener('touchmove', _touchMoveHandler, { passive: false })
@@ -174,8 +218,10 @@ export function useTimelineDrag() {
   })
 
   return {
+    dragPreviewSlot,
     draggedCardId,
     suppressClick,
+    getDragRevealedCard: () => _dragCard.value?.revealed ?? null,
     onDragStart,
     onDragOver,
     onDrop,
