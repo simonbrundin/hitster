@@ -9,7 +9,7 @@ spec:
         - name: hitster-app
           # Updated by .github/workflows/commit.nuxt.yaml.
           image: >-
-            ghcr.io/simonbrundin/hitster@sha256:62b86285c34722e130796e69025ca771fc028975925e89e22dbbc457e7a44917
+            ghcr.io/simonbrundin/hitster@sha256:a6fb5b09c02babe3cb1713572929e9de55800d6fbf4b5e6b731b186d1543b750
           env:
             - name: NODE_ENV
               value: "production"
