@@ -119,6 +119,10 @@ export function useSpotifyPlayer() {
           error.value = `Uppspelningsfel: ${err.message}`
         })
 
+        player.addListener('autoplay_failed', () => {
+          error.value = 'Tryck på spela-knappen igen för att starta låten på iPhone.'
+        })
+
         player.addListener('player_state_changed', (state: unknown) => {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const s = state as any
@@ -225,6 +229,11 @@ export function useSpotifyPlayer() {
     isPlaying.value = true
   }
 
+  const activateElement = async () => {
+    if (!player || !sdkReady) return
+    await player.activateElement()
+  }
+
   const togglePlay = async () => {
     if (!player || !sdkReady) return
     await player.togglePlay()
@@ -240,6 +249,7 @@ export function useSpotifyPlayer() {
     playTrack,
     pause,
     resume,
+    activateElement,
     togglePlay
   }
 }

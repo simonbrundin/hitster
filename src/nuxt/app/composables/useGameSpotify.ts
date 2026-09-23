@@ -3,7 +3,7 @@
  */
 export function useGameSpotify() {
   const { gameState } = useGame()
-  const { isConnected, isPlaying, error, connect, playTrack, togglePlay } = useSpotifyPlayer()
+  const { isConnected, isPlaying, error, connect, playTrack, activateElement, togglePlay } = useSpotifyPlayer()
 
   const connecting = ref(false)
   const activeUri = ref<string | null>(null)
@@ -56,6 +56,9 @@ export function useGameSpotify() {
     if (isCurrentTrackPlaying.value) {
       await togglePlay()
     } else {
+      // iOS Safari blocks playback transferred from Spotify unless the SDK
+      // is activated from the same user gesture as the play action.
+      await activateElement()
       await playCurrentTrack()
     }
   }
