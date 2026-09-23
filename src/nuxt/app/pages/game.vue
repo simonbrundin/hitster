@@ -3,7 +3,7 @@ definePageMeta({ layout: false })
 
 useHead({ title: 'Spelar - Hitster Battle' })
 
-const { isAuthenticated } = useSpotify()
+const { isAuthenticated, initFromStorage } = useSpotify()
 const {
   checkPlacedCard,
   lockPendingCards,
@@ -16,7 +16,8 @@ const {
   syncError,
   startPolling,
   stopPolling,
-  gameState
+  gameState,
+  isHost
 } = useGame()
 const router = useRouter()
 
@@ -69,17 +70,15 @@ const {
 // ── Lifecycle ───────────────────────────────────────────────────────────────
 
 onMounted(async () => {
-  if (!isAuthenticated.value) {
-    router.push('/')
-    return
-  }
+  initFromStorage()
+
   if (!gameState.value || gameState.value.status !== 'playing') {
     router.push('/lobby')
     return
   }
 
   startPolling()
-  if (!isConnected.value) {
+  if (isHost.value && isAuthenticated.value && !isConnected.value) {
     connecting.value = true
     try {
       await ensureConnected()
@@ -136,6 +135,7 @@ const handleTrade = () => {
 }
 
 const handlePlayClick = async () => {
+  if (!isHost.value) return
   await togglePlayback()
 }
 
@@ -317,7 +317,7 @@ const handleDrop = (event: DragEvent) => {
               ?
             </p>
             <button
-              v-if="isViewerTurn"
+              v-if="isHost"
               class="mt-1 flex h-9 w-9 items-center justify-center rounded-full bg-[#1db954] text-white"
               :disabled="connecting"
               @click.stop="handlePlayClick"
@@ -331,7 +331,7 @@ const handleDrop = (event: DragEvent) => {
               v-else
               class="mt-1 block text-xs text-neutral-500"
             >
-              Väntar på aktivt lag
+              Värdens telefon spelar låten
             </span>
           </div>
         </div>

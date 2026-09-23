@@ -132,7 +132,9 @@ export function applyGameAction(
 export function sanitizeGameForPlayer(game: GameState, playerId: string): GameState {
   const player = getPlayer(game, playerId)
   const visibleTeamId = player?.teamId ?? null
-  const cards = game.cards.map(card => sanitizeCard(card, game, visibleTeamId))
+  const currentCardId = getCurrentCard(game)?.id
+  const isPlaybackController = player?.id === game.players[0]?.id
+  const cards = game.cards.map(card => sanitizeCard(card, game, visibleTeamId, currentCardId, isPlaybackController))
 
   return {
     ...game,
@@ -479,11 +481,18 @@ function toSpotifyUri(spotifyUrl: string, trackId?: string): string {
   return id ? `spotify:track:${id}` : ''
 }
 
-function sanitizeCard(card: GameCard, game: GameState, visibleTeamId: string | null): GameCard {
+function sanitizeCard(
+  card: GameCard,
+  game: GameState,
+  visibleTeamId: string | null,
+  currentCardId: string | undefined,
+  isPlaybackController: boolean
+): GameCard {
   const canSeeMetadata = card.isReference
     || card.revealed
     || (card.isLocked && card.lockedByTeamId === visibleTeamId)
-  const isCurrentCard = !card.isRevealed && !card.isDiscarded && game.currentTurn === visibleTeamId
+  const isCurrentCard = card.id === currentCardId
+    && (game.currentTurn === visibleTeamId || isPlaybackController)
 
   if (canSeeMetadata) return { ...card, track: { ...card.track } }
   if (isCurrentCard) {

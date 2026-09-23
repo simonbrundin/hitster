@@ -9,7 +9,6 @@ useHead({
 
 const route = useRoute()
 const router = useRouter()
-const { isAuthenticated, initFromStorage } = useSpotify()
 const { gameState, getGameByCode, joinGame, syncError } = useGame()
 
 const code = computed(() => route.params.code as string)
@@ -19,14 +18,6 @@ const isJoining = ref(false)
 const joinError = ref('')
 
 onMounted(async () => {
-  initFromStorage()
-
-  if (!isAuthenticated.value) {
-    localStorage.setItem('pending_game_code', code.value)
-    router.push('/')
-    return
-  }
-
   await getGameByCode(code.value)
 })
 

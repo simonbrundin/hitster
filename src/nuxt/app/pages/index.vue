@@ -10,6 +10,9 @@ useHead({
 
 const { isAuthenticated, initFromStorage, logout } = useSpotify()
 const { gameState } = useGame()
+const router = useRouter()
+const joinCode = ref('')
+const joinError = ref('')
 
 const features = [
   {
@@ -34,6 +37,17 @@ const gameSteps = [
   ['02', 'Välj en spellista', 'Ta med låtarna som ska definiera kvällen.'],
   ['03', 'Bygg tidslinjen', 'Lyssna, gissa och placera varje låt efter utgivningsår.']
 ]
+
+const goToJoinGame = () => {
+  const code = joinCode.value.trim().toUpperCase()
+  if (!/^[A-Z0-9]{6}$/.test(code)) {
+    joinError.value = 'Ange den sex tecken långa spelkoden.'
+    return
+  }
+
+  joinError.value = ''
+  router.push(`/join/${code}`)
+}
 
 onMounted(() => {
   initFromStorage()
@@ -116,7 +130,7 @@ onMounted(() => {
                 to="/game"
                 class="cta-primary"
               >
-Fortsätt spel
+                Fortsätt spel
                 <Icon
                   name="i-lucide-arrow-right"
                   class="h-4 w-4"
@@ -127,7 +141,7 @@ Fortsätt spel
                 to="/lobby"
                 class="cta-primary"
               >
-Starta nytt spel
+                Starta nytt spel
                 <Icon
                   name="i-lucide-arrow-right"
                   class="h-4 w-4"
@@ -236,6 +250,42 @@ Starta nytt spel
               </div>
             </div>
           </ClientOnly>
+
+          <div class="mt-5 border-t border-white/10 pt-5">
+            <p class="text-sm font-semibold text-white">
+              Gå med i ett spel
+            </p>
+            <p class="mt-1 text-xs text-white/50">
+              Ange spelkoden från värdens skärm. Spotify behövs bara på telefonen som spelar musiken.
+            </p>
+            <form
+              class="mt-3 flex gap-2"
+              @submit.prevent="goToJoinGame"
+            >
+              <input
+                v-model="joinCode"
+                type="text"
+                inputmode="text"
+                maxlength="6"
+                autocomplete="off"
+                placeholder="ABC123"
+                aria-label="Spelkod"
+                class="min-w-0 flex-1 rounded-lg border border-white/15 bg-white/10 px-3 py-2 text-center font-mono font-bold tracking-widest text-white uppercase outline-none placeholder:text-white/30 focus:border-[#b8f36b]"
+              >
+              <button
+                type="submit"
+                class="rounded-lg bg-[#b8f36b] px-4 py-2 text-sm font-bold text-[#17211d] transition hover:bg-white"
+              >
+                Anslut
+              </button>
+            </form>
+            <p
+              v-if="joinError"
+              class="mt-2 text-xs text-red-300"
+            >
+              {{ joinError }}
+            </p>
+          </div>
 
           <NuxtLink
             v-if="!isAuthenticated"

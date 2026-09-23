@@ -6,7 +6,7 @@ import { useGame } from './useGame'
  * Works with both pointer drag events and touch events.
  */
 export function useTimelineDrag() {
-  const { placeCard, moveCard, unplaceCard } = useGame()
+  const { placeCard, moveCard, unplaceCard, isCurrentViewerTurn } = useGame()
 
   const draggedCardId = ref<string | null>(null)
   const dragStartedNewCard = ref(false)
@@ -32,6 +32,7 @@ export function useTimelineDrag() {
   }
 
   const getDraggableCard = (): GameCard | null => {
+    if (!isCurrentViewerTurn()) return null
     const phase = useGame().gameState.value?.turnPhase
     if (phase === 'checking') return getPlacedCards()[0] ?? null
     if (phase === 'placing') return getCurrentCard() ?? null
@@ -45,6 +46,7 @@ export function useTimelineDrag() {
   // ── Pointer drag ─────────────────────────────────────────────────────────
 
   const onDragStart = (event: DragEvent, timelineLength: number) => {
+    if (!isCurrentViewerTurn()) return
     const phase = getCurrentPhase()
     if (phase === 'checking') {
       draggedCardId.value = getPlacedCards()[0]?.id ?? null
