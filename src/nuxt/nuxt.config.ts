@@ -1,4 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+import { fileURLToPath } from 'node:url'
 
 export default defineNuxtConfig({
   modules: ['@nuxt/eslint', '@nuxt/ui', '@nuxt/image'],
@@ -50,8 +51,8 @@ export default defineNuxtConfig({
 
   devServer: {
     https: {
-      key: './certs/key.pem',
-      cert: './certs/cert.pem'
+      key: fileURLToPath(new URL('../certs/key.pem', import.meta.url)),
+      cert: fileURLToPath(new URL('../certs/cert.pem', import.meta.url))
     },
     host: '0.0.0.0'
   },
