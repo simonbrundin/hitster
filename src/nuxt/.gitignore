@@ -20,5 +20,18 @@ logs
 
 # Local env files
 .env
+
+# Local HTTPS development certificates
+certs/*.pem
 .env.*
 !.env.example
+
+# mkcert generated certificates (user-specific, trusted locally)
+certs/cert.pem
+certs/key.pem
+certs/rootCA.pem
+certs/rootCA-key.pem
+
+# Persistent game storage (file-system driver)
+data/games
+

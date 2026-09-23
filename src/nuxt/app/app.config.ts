@@ -1,8 +1,7 @@
 export default defineAppConfig({
-  ui: {
-    colors: {
-      primary: 'green',
-      neutral: 'slate'
-    }
+  title: 'Hitster Battle',
+  description: 'Online multiplayer music guessing game with Spotify',
+  theme: {
+    primaryColor: '#1DB954' // Spotify green
   }
 })

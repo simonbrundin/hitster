@@ -1,18 +1,113 @@
 @import "tailwindcss";
-@import "@nuxt/ui";
 
-@theme static {
-  --font-sans: 'Public Sans', sans-serif;
+@source "../";
+@source "../../server/";
 
-  --color-green-50: #EFFDF5;
-  --color-green-100: #D9FBE8;
-  --color-green-200: #B3F5D1;
-  --color-green-300: #75EDAE;
-  --color-green-400: #00DC82;
-  --color-green-500: #00C16A;
-  --color-green-600: #00A155;
-  --color-green-700: #007F45;
-  --color-green-800: #016538;
-  --color-green-900: #0A5331;
-  --color-green-950: #052E16;
+/* Custom Spotify Green */
+.bg-spotify {
+  background-color: #1DB954;
+}
+
+.bg-spotify:hover {
+  background-color: #1ed760;
+}
+
+.text-spotify {
+  color: #1DB954;
+}
+
+.border-spotify {
+  border-color: #1DB954;
+}
+
+/* Smooth animations */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #3a3a3a;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #4a4a4a;
+}
+
+/* Prevent text selection on game elements */
+.no-select {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Glow effects */
+.glow-spotify {
+  box-shadow: 0 0 20px rgba(29, 185, 84, 0.3);
+}
+
+.glow-yellow {
+  box-shadow: 0 0 20px rgba(250, 204, 21, 0.3);
+}
+
+/* Card hover effects */
+.card-hover {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+/* Pulse animation for current turn */
+@keyframes pulse-ring {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+.pulse-ring::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: inherit;
+  border: 2px solid currentColor;
+  animation: pulse-ring 1.5s ease-out infinite;
+}
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, #1DB954, #9B59B6, #F1C40F);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Timeline gradient */
+.timeline-gradient {
+  background: linear-gradient(90deg,
+    #6366f1 0%,   /* Purple - 60s */
+    #8b5cf6 20%,  /* Violet - 70s */
+    #fbbf24 40%,  /* Yellow - 80s */
+    #f97316 50%,  /* Orange - 90s */
+    #ef4444 60%,  /* Red - 00s */
+    #3b82f6 75%,  /* Blue - 10s */
+    #1DB954 100%  /* Green - 20s */
+  );
 }
