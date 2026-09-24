@@ -2,7 +2,7 @@
 import { fileURLToPath } from 'node:url'
 
 export default defineNuxtConfig({
-  modules: ['@nuxt/eslint', '@nuxt/ui', '@nuxt/image'],
+  modules: ['@nuxt/eslint', '@nuxt/ui', '@nuxt/image', '@vite-pwa/nuxt'],
 
   devtools: {
     enabled: false
@@ -10,6 +10,13 @@ export default defineNuxtConfig({
 
   app: {
     head: {
+      meta: [
+        { name: 'viewport', content: 'width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no' },
+        { name: 'apple-mobile-web-app-capable', content: 'yes' },
+        { name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent' },
+        { name: 'mobile-web-app-capable', content: 'yes' },
+        { name: 'theme-color', content: '#1a1a2e' }
+      ],
       link: [
         { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
         {
@@ -57,6 +64,46 @@ export default defineNuxtConfig({
   },
 
   compatibilityDate: '2026-06-30',
+
+  pwa: {
+    registerWebManifestOnRoot: true,
+    manifest: {
+      name: 'Hitster Battle',
+      short_name: 'Hitster',
+      description: 'Online multiplayer music guessing game with Spotify',
+      theme_color: '#1a1a2e',
+      background_color: '#1a1a2e',
+      display: 'standalone',
+      orientation: 'portrait',
+      start_url: '/',
+      icons: [
+        {
+          src: '/icon-192.png',
+          sizes: '192x192',
+          type: 'image/png'
+        },
+        {
+          src: '/icon-512.png',
+          sizes: '512x512',
+          type: 'image/png'
+        },
+        {
+          src: '/apple-touch-icon.png',
+          sizes: '180x180',
+          type: 'image/png'
+        }
+      ]
+    },
+    devOptions: {
+      enabled: true,
+      suppressWarnings: true,
+      navigateFallback: '/',
+      type: 'module'
+    },
+    workbox: {
+      navigateFallbackDenylist: [/^\/api\//]
+    }
+  },
 
   nitro: {
     preset: 'bun',

@@ -1,14 +1,13 @@
 <script setup lang="ts">
 useHead({
+  htmlAttrs: { lang: 'sv' },
   meta: [
-    { name: 'viewport', content: 'width=device-width, initial-scale=1' }
-  ],
-  link: [
-    { rel: 'icon', href: '/favicon.ico' }
-  ],
-  htmlAttrs: {
-    lang: 'en'
-  }
+    { name: 'viewport', content: 'width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no' },
+    { name: 'apple-mobile-web-app-capable', content: 'yes' },
+    { name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent' },
+    { name: 'mobile-web-app-capable', content: 'yes' },
+    { name: 'theme-color', content: '#1a1a2e' }
+  ]
 })
 
 const title = 'Hitster Battle'
@@ -24,6 +23,7 @@ useSeoMeta({
 </script>
 
 <template>
+  <NuxtPwaAssets />
   <UApp>
     <NuxtPage />
   </UApp>
