@@ -3,6 +3,29 @@
 @source "../";
 @source "../../server/";
 
+/* iOS Safe Area Support for PWA */
+:root {
+  --safe-area-inset-top: env(safe-area-inset-top);
+  --safe-area-inset-bottom: env(safe-area-inset-bottom);
+  --safe-area-inset-left: env(safe-area-inset-left);
+  --safe-area-inset-right: env(safe-area-inset-right);
+}
+
+html, body, #__nuxt {
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding-top: var(--safe-area-inset-top);
+  padding-bottom: var(--safe-area-inset-bottom);
+  padding-left: var(--safe-area-inset-left);
+  padding-right: var(--safe-area-inset-right);
+}
+
+/* Ensure content doesn't get hidden under iOS status bar */
+body {
+  padding-top: env(safe-area-inset-top);
+  overflow-x: hidden;
+}
+
 /* Custom Spotify Green */
 .bg-spotify {
   background-color: #1DB954;
