@@ -158,7 +158,6 @@ const selectTeam = (teamId: string) => {
           </NuxtLink>
         </div>
       </div>
-    </div>
   </div>
 </template>
 
