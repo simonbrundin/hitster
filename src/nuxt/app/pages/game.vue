@@ -195,30 +195,32 @@ const handleDrop = (event: DragEvent) => {
 </script>
 
 <template>
-  <div class="flex h-screen flex-col bg-neutral-950 text-white">
+  <div class="flex h-screen flex-col bg-neutral-950 text-white theme-dark">
     <!-- Header with team status and action buttons -->
-    <GameHeader
-      v-if="gameState"
-      :code="gameState.code"
-      :current-team="currentTeam"
-      :turn-phase="turnPhase"
-      :is-lock-in-variant="isLockInVariant"
-      :is-viewer-turn="isViewerTurn"
-      :is-controller="isHost"
-      :current-team-hitster-cards="currentTeamHitsterCards"
-      :current-card="currentCard"
-      :placed-cards="placedCards"
-      :pending-cards="pendingCards"
-      :last-message="lastMessage"
-      :opponent-teams="opponentTeams"
-      :challenge-team-id="challengeTeamId"
-      @check="handleCheck"
-      @lock-in="handleLockIn"
-      @continue="handleContinue"
-      @skip="handleSkip"
-      @trade="handleTrade"
-      @challenge="handleChallenge"
-    />
+    <div class="safe-area-top bg-neutral-950">
+      <GameHeader
+        v-if="gameState"
+        :code="gameState.code"
+        :current-team="currentTeam"
+        :turn-phase="turnPhase"
+        :is-lock-in-variant="isLockInVariant"
+        :is-viewer-turn="isViewerTurn"
+        :is-controller="isHost"
+        :current-team-hitster-cards="currentTeamHitsterCards"
+        :current-card="currentCard"
+        :placed-cards="placedCards"
+        :pending-cards="pendingCards"
+        :last-message="lastMessage"
+        :opponent-teams="opponentTeams"
+        :challenge-team-id="challengeTeamId"
+        @check="handleCheck"
+        @lock-in="handleLockIn"
+        @continue="handleContinue"
+        @skip="handleSkip"
+        @trade="handleTrade"
+        @challenge="handleChallenge"
+      />
+    </div>
 
     <!-- Game over overlay -->
     <GameOverlay
@@ -311,7 +313,7 @@ const handleDrop = (event: DragEvent) => {
     </main>
 
     <!-- Bottom bar: current card player + team list -->
-    <div class="shrink-0 border-t border-neutral-800 bg-neutral-900 p-3">
+    <div class="safe-area-all shrink-0 border-t border-neutral-800 bg-neutral-900 p-3">
       <!-- Current card with Spotify player -->
       <div
         v-if="currentCard && currentTeam"

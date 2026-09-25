@@ -65,6 +65,25 @@ export default defineNuxtConfig({
 
   compatibilityDate: '2026-06-30',
 
+  nitro: {
+    preset: 'bun',
+    storage: {
+      games: {
+        driver: 'fs',
+        base: './data/games'
+      }
+    }
+  },
+
+  eslint: {
+    config: {
+      stylistic: {
+        commaDangle: 'never',
+        braceStyle: '1tbs'
+      }
+    }
+  },
+
   pwa: {
     registerWebManifestOnRoot: true,
     manifest: {
@@ -102,25 +121,6 @@ export default defineNuxtConfig({
     },
     workbox: {
       navigateFallbackDenylist: [/^\/api\//]
-    }
-  },
-
-  nitro: {
-    preset: 'bun',
-    storage: {
-      games: {
-        driver: 'fs',
-        base: './data/games'
-      }
-    }
-  },
-
-  eslint: {
-    config: {
-      stylistic: {
-        commaDangle: 'never',
-        braceStyle: '1tbs'
-      }
     }
   }
 })

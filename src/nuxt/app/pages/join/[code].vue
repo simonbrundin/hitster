@@ -52,110 +52,112 @@ const selectTeam = (teamId: string) => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-neutral-950 flex items-center justify-center p-6">
-    <div class="w-full max-w-md">
-      <!-- Logo -->
-      <div class="text-center mb-8">
-        <div class="flex items-center justify-center gap-2 mb-4">
-          <Icon
-            name="i-simple-icons-spotify"
-            class="h-8 w-8 text-[#1db954]"
-          />
-          <span class="text-2xl font-bold text-white">Hitster Battle</span>
-        </div>
-
-        <div class="inline-flex items-center gap-2 px-4 py-2 bg-neutral-800 rounded-full">
-          <span class="text-neutral-400 text-sm">Ansluter till spel:</span>
-          <code class="text-lg font-mono font-bold text-white">{{ code }}</code>
-        </div>
-      </div>
-
-      <!-- Join Form -->
-      <div class="bg-neutral-900/50 backdrop-blur rounded-2xl p-8 border border-neutral-800">
-        <h2 class="text-xl font-bold text-white mb-6">
-          Gå med i spelet
-        </h2>
-
-        <UFormField
-          label="Ditt namn"
-          class="mb-6"
-        >
-          <UInput
-            v-model="playerNameInput"
-            placeholder="Ange ditt namn"
-            icon="i-lucide-user"
-            color="neutral"
-            variant="outline"
-            class="w-full"
-            size="lg"
-          />
-        </UFormField>
-
-        <UFormField
-          label="Välj ditt lag"
-          class="mb-6"
-        >
-          <div class="grid grid-cols-2 gap-3">
-            <button
-              v-for="team in gameState?.teams"
-              :key="team.id"
-              :class="[
-                'flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all',
-                selectedTeamId === team.id
-                  ? 'border-white bg-white/10'
-                  : 'border-neutral-600 hover:border-neutral-500'
-              ]"
-              @click="selectTeam(team.id)"
-            >
-              <div
-                class="w-8 h-8 rounded-full"
-                :style="{ backgroundColor: team.color }"
-              />
-              <span class="text-white text-sm font-medium">{{ team.name }}</span>
-              <span class="text-xs text-neutral-500">
-                {{ team.members.length }} anslutna
-              </span>
-            </button>
+  <div class="min-h-screen bg-neutral-950 flex items-center justify-center p-6 theme-dark">
+    <div class="w-full max-w-md safe-area-top pt-3">
+      <div class="w-full max-w-md">
+        <!-- Logo -->
+        <div class="text-center mb-8">
+          <div class="flex items-center justify-center gap-2 mb-4">
+            <Icon
+              name="i-simple-icons-spotify"
+              class="h-8 w-8 text-[#1db954]"
+            />
+            <span class="text-2xl font-bold text-white">Hitster Battle</span>
           </div>
-        </UFormField>
 
-        <!-- Error -->
-        <UAlert
-          v-if="joinError || syncError"
-          color="error"
-          variant="subtle"
-          class="mb-4"
-          :title="joinError || syncError || undefined"
-        />
+          <div class="inline-flex items-center gap-2 px-4 py-2 bg-neutral-800 rounded-full">
+            <span class="text-neutral-400 text-sm">Ansluter till spel:</span>
+            <code class="text-lg font-mono font-bold text-white">{{ code }}</code>
+          </div>
+        </div>
 
-        <UButton
-          :disabled="!playerNameInput.trim() || !selectedTeamId || isJoining"
-          :loading="isJoining"
-          size="lg"
-          class="w-full"
-          color="primary"
-          @click="handleJoin"
-        >
-          <Icon
-            name="i-lucide-log-in"
-            class="w-5 h-5 mr-2"
+        <!-- Join Form -->
+        <div class="bg-neutral-900/50 backdrop-blur rounded-2xl p-8 border border-neutral-800">
+          <h2 class="text-xl font-bold text-white mb-6">
+            Gå med i spelet
+          </h2>
+
+          <UFormField
+            label="Ditt namn"
+            class="mb-6"
+          >
+            <UInput
+              v-model="playerNameInput"
+              placeholder="Ange ditt namn"
+              icon="i-lucide-user"
+              color="neutral"
+              variant="outline"
+              class="w-full"
+              size="lg"
+            />
+          </UFormField>
+
+          <UFormField
+            label="Välj ditt lag"
+            class="mb-6"
+          >
+            <div class="grid grid-cols-2 gap-3">
+              <button
+                v-for="team in gameState?.teams"
+                :key="team.id"
+                :class="[
+                  'flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all',
+                  selectedTeamId === team.id
+                    ? 'border-white bg-white/10'
+                    : 'border-neutral-600 hover:border-neutral-500'
+                ]"
+                @click="selectTeam(team.id)"
+              >
+                <div
+                  class="w-8 h-8 rounded-full"
+                  :style="{ backgroundColor: team.color }"
+                />
+                <span class="text-white text-sm font-medium">{{ team.name }}</span>
+                <span class="text-xs text-neutral-500">
+                  {{ team.members.length }} anslutna
+                </span>
+              </button>
+            </div>
+          </UFormField>
+
+          <!-- Error -->
+          <UAlert
+            v-if="joinError || syncError"
+            color="error"
+            variant="subtle"
+            class="mb-4"
+            :title="joinError || syncError || undefined"
           />
-          Gå med
-        </UButton>
-      </div>
 
-      <!-- Back Link -->
-      <div class="text-center mt-6">
-        <NuxtLink
-          to="/"
-          class="text-neutral-400 hover:text-white transition-colors text-sm"
-        >
-          <Icon
-            name="i-lucide-arrow-left"
-            class="w-4 h-4 inline mr-1"
-          />
-          Tillbaka till startsidan
-        </NuxtLink>
+          <UButton
+            :disabled="!playerNameInput.trim() || !selectedTeamId || isJoining"
+            :loading="isJoining"
+            size="lg"
+            class="w-full"
+            color="primary"
+            @click="handleJoin"
+          >
+            <Icon
+              name="i-lucide-log-in"
+              class="w-5 h-5 mr-2"
+            />
+            Gå med
+          </UButton>
+        </div>
+
+        <!-- Back Link -->
+        <div class="text-center mt-6">
+          <NuxtLink
+            to="/"
+            class="text-neutral-400 hover:text-white transition-colors text-sm"
+          >
+            <Icon
+              name="i-lucide-arrow-left"
+              class="w-4 h-4 inline mr-1"
+            />
+            Tillbaka till startsidan
+          </NuxtLink>
+        </div>
       </div>
     </div>
   </div>
