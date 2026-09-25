@@ -26,30 +26,7 @@ html, body, #__nuxt {
   min-height: 100dvh;
 }
 
-/* Safe area padding - only apply where needed, not globally on body */
-/* Using @layer to ensure these override Tailwind's default specificity */
-@layer utilities {
-  .safe-area-top {
-    padding-top: env(safe-area-inset-top) !important;
-    padding-top: env(safe-area-inset-top, 0px) !important;
-  }
 
-  .safe-area-bottom {
-    padding-bottom: env(safe-area-inset-bottom) !important;
-    padding-bottom: env(safe-area-inset-bottom, 0px) !important;
-  }
-
-  .safe-area-all {
-    padding-top: env(safe-area-inset-top) !important;
-    padding-top: env(safe-area-inset-top, 0px) !important;
-    padding-bottom: env(safe-area-inset-bottom) !important;
-    padding-bottom: env(safe-area-inset-bottom, 0px) !important;
-    padding-left: env(safe-area-inset-left) !important;
-    padding-left: env(safe-area-inset-left, 0px) !important;
-    padding-right: env(safe-area-inset-right) !important;
-    padding-right: env(safe-area-inset-right, 0px) !important;
-  }
-}
 
 /* Legacy: remove safe area from body to prevent white bars */
 body {

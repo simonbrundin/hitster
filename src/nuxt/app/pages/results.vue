@@ -51,7 +51,7 @@ const getMedal = (index: number): string => {
 
 <template>
   <div class="min-h-screen bg-gradient-to-br from-neutral-950 via-neutral-900 to-neutral-950 theme-dark">
-    <div class="safe-area-top pt-3">
+    <div :style="{ paddingTop: `max(env(safe-area-inset-top), 12px)` }">
       <div class="max-w-4xl mx-auto px-6 py-12">
         <!-- Header -->
         <div class="text-center mb-12">

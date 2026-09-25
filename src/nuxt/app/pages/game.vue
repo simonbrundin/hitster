@@ -197,7 +197,10 @@ const handleDrop = (event: DragEvent) => {
 <template>
   <div class="flex h-screen flex-col bg-neutral-950 text-white theme-dark">
     <!-- Header with team status and action buttons -->
-    <div class="safe-area-top bg-neutral-950">
+    <div
+      class="bg-neutral-950"
+      :style="{ paddingTop: `max(env(safe-area-inset-top), 12px)` }"
+    >
       <GameHeader
         v-if="gameState"
         :code="gameState.code"
@@ -313,7 +316,10 @@ const handleDrop = (event: DragEvent) => {
     </main>
 
     <!-- Bottom bar: current card player + team list -->
-    <div class="safe-area-all shrink-0 border-t border-neutral-800 bg-neutral-900 p-3">
+    <div
+      class="shrink-0 border-t border-neutral-800 bg-neutral-900 p-3"
+      :style="{ paddingBottom: `max(env(safe-area-inset-bottom), 12px)` }"
+    >
       <!-- Current card with Spotify player -->
       <div
         v-if="currentCard && currentTeam"
