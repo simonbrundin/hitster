@@ -53,7 +53,7 @@ const selectTeam = (teamId: string) => {
 
 <template>
   <div class="min-h-screen bg-neutral-950 flex items-center justify-center p-6 theme-dark">
-    <div class="w-full max-w-md" :style="{ paddingTop: `max(env(safe-area-inset-top), 12px)` }">
+    <div class="w-full max-w-md safe-area-top">
         <!-- Logo -->
         <div class="text-center mb-8">
           <div class="flex items-center justify-center gap-2 mb-4">
